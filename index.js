@@ -34,6 +34,10 @@ client.initialize();
 // Middleware to parse JSON body
 app.use(express.json());
 
+app.get("/",(req,res)=>{
+    res.send("Express server")
+})
+
 // Serve the QR code on the /show-qr route
 app.get('/show-qr', (req, res) => {
     if (qrCodeData) {
@@ -113,7 +117,7 @@ app.get('/send-button', (req, res) => {
 });
 
 // Start the Express server
-const PORT = 3000;
+const PORT = 3000 || process.env.PORT;
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
