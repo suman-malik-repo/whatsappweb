@@ -84,37 +84,7 @@ app.get('/send-message', (req, res) => {
         });
 });
 
-// Route to send a button message to a specific number
-app.get('/send-button', (req, res) => {
-    const number = "916290232268"
 
-    if (!number) {
-        return res.status(400).send('Please provide a number');
-    }
-
-    const formattedNumber = `${number}@c.us`;
-
-    // Create a button template
-    const button = new Buttons(
-        'Do you like our service?', // The message
-        [
-            { body: 'Yes' }, // First button
-            { body: 'No' },  // Second button
-            { body: 'Maybe' } // Third button
-        ],
-        'Feedback', // Header
-        'Choose an option below' // Footer
-    );
-
-    client.sendMessage(formattedNumber, button)
-        .then(response => {
-            res.status(200).send(`Button message sent to ${number}`);
-        })
-        .catch(err => {
-            console.error(err);
-            res.status(500).send('Failed to send button message');
-        });
-});
 
 // Start the Express server
 const PORT = 3000 || process.env.PORT;
