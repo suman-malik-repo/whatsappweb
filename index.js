@@ -80,7 +80,7 @@ app.get('/send-message', (req, res) => {
         })
         .catch(err => {
             console.error(err);
-            res.status(500).send('Failed to send message');
+            res.status(500).send('Failed to send message', err);
         });
 });
 
