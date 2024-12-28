@@ -90,7 +90,7 @@ app.get('/send-message/:number/:message', (req, res) => {
 
     client.sendMessage(formattedNumber, message)
         .then(response => {
-            console.log(`Message sent to ${number}:`);
+            console.log(`Message sent to ${number}`);
             res.status(200).send(`Message sent to ${number}`);
         })
         .catch(err => {
