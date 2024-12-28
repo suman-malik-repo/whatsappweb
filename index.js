@@ -1,9 +1,14 @@
 const express = require('express');
+const cors = require('cors');
 const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
 
 // Initialize the app and WhatsApp client
 const app = express();
+
+// Enable CORS for all origins
+app.use(cors());
+
 const client = new Client({
     authStrategy: null // Disable session persistence
 });
