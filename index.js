@@ -1,13 +1,16 @@
 const express = require('express');
-const { Client, Buttons } = require('whatsapp-web.js');
+const { Client } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
 
 // Initialize the app and WhatsApp client
 const app = express();
-const client = new Client();
+const client = new Client({
+    authStrategy: null // Disable session persistence
+});
 
 let qrCodeData = ''; // Store the QR code data temporarily
 
+// Event listeners for WhatsApp client
 client.on('qr', (qr) => {
     // Save the QR code string to be rendered later
     qrCodeData = qr;
@@ -22,21 +25,22 @@ client.on('message', msg => {
     const senderNumber = msg.from.replace('@c.us', ''); // Remove the @c.us suffix
     const messageBody = msg.body; // The actual message content
 
-    // Log the sender's phone number and the message
-    console.log(`Message received from ${senderNumber}: ${messageBody}`);
+    // Reply to a ping message
     if (msg.body === '!ping') {
         msg.reply('pong');
     }
 });
 
+// Initialize the WhatsApp client
 client.initialize();
 
 // Middleware to parse JSON body
 app.use(express.json());
 
-app.get("/",(req,res)=>{
-    res.send("Express server")
-})
+// Basic route to check server status
+app.get("/", (req, res) => {
+    res.send("Express server is running");
+});
 
 // Serve the QR code on the /show-qr route
 app.get('/show-qr', (req, res) => {
@@ -63,11 +67,10 @@ app.get('/show-qr', (req, res) => {
 
 // Route to send a message to a specific number
 app.get('/send-message', (req, res) => {
-    // const { number, message } = req.body;
-    const number = "916290232268"
-    const message = "Hello"
+    const number = "916290232268"; // Replace with your desired number
+    const message = "Hello"; // Replace with your desired message
 
-    // Make sure the number and message are provided
+    // Ensure the number and message are provided
     if (!number || !message) {
         return res.status(400).send('Please provide both number and message');
     }
@@ -83,7 +86,6 @@ app.get('/send-message', (req, res) => {
             res.status(500).send('Failed to send message', err);
         });
 });
-
 
 // Start the Express server
 const PORT = 3000 || process.env.PORT;
