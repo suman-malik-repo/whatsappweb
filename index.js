@@ -66,9 +66,9 @@ app.get('/show-qr', (req, res) => {
 });
 
 // Route to send a message to a specific number
-app.get('/send-message', (req, res) => {
-    const number = "916290232268"; // Replace with your desired number
-    const message = "Hello"; // Replace with your desired message
+app.get('/send-message/:number/:message', (req, res) => {
+    const number = req.params.number; // Replace with your desired number
+    const message = req.params.message; // Replace with your desired message
 
     // Ensure the number and message are provided
     if (!number || !message) {
