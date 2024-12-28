@@ -1,6 +1,6 @@
 const express = require('express');
 const cors = require('cors');
-const { Client } = require('whatsapp-web.js');
+const { Client, LocalAuth } = require('whatsapp-web.js');
 const qrcode = require('qrcode');
 
 // Initialize the app and WhatsApp client
@@ -10,15 +10,14 @@ const app = express();
 app.use(cors());
 
 const client = new Client({
-    authStrategy: null // Disable session persistence
+    authStrategy: new LocalAuth(), // Enable session persistence
 });
 
 let qrCodeData = ''; // Store the QR code data temporarily
 
 // Event listeners for WhatsApp client
 client.on('qr', (qr) => {
-    // Save the QR code string to be rendered later
-    qrCodeData = qr;
+    qrCodeData = qr; // Save the QR code string to be rendered later
     console.log('QR RECEIVED');
 });
 
@@ -26,14 +25,17 @@ client.on('ready', () => {
     console.log('Client is ready!');
 });
 
-client.on('message', msg => {
-    const senderNumber = msg.from.replace('@c.us', ''); // Remove the @c.us suffix
-    const messageBody = msg.body; // The actual message content
+client.on('authenticated', () => {
+    console.log('WhatsApp client authenticated!');
+});
 
-    // Reply to a ping message
-    if (msg.body === '!ping') {
-        msg.reply('pong');
-    }
+client.on('auth_failure', (err) => {
+    console.error('Authentication failed:', err);
+});
+
+client.on('disconnected', (reason) => {
+    console.log('Client was disconnected:', reason);
+    qrCodeData = ''; // Clear QR code data if disconnected
 });
 
 // Initialize the WhatsApp client
@@ -46,6 +48,7 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.send("Express server is running");
 });
+
 app.get("/ping", (req, res) => {
     res.send("ping");
 });
@@ -54,20 +57,21 @@ app.get("/ping", (req, res) => {
 app.get('/show-qr', (req, res) => {
     if (qrCodeData) {
         // Generate QR code image and send it as a response
-        qrcode.toDataURL(qrCodeData, (err, url) => {
-            if (err) {
-                return res.send('Error generating QR code');
-            }
-            // Send an HTML page that displays the QR code
-            res.send(`
-                <html>
-                    <body>
-                        <h1>Scan the QR code with WhatsApp</h1>
-                        <img src="${url}" alt="QR Code" />
-                    </body>
-                </html>
-            `);
-        });
+        qrcode.toDataURL(qrCodeData)
+            .then(url => {
+                res.send(`
+                    <html>
+                        <body>
+                            <h1>Scan the QR code with WhatsApp</h1>
+                            <img src="${url}" alt="QR Code" />
+                        </body>
+                    </html>
+                `);
+            })
+            .catch(err => {
+                console.error('Error generating QR code:', err);
+                res.status(500).send('Error generating QR code');
+            });
     } else {
         res.send('QR code is not available. Please wait...');
     }
@@ -75,8 +79,7 @@ app.get('/show-qr', (req, res) => {
 
 // Route to send a message to a specific number
 app.get('/send-message/:number/:message', (req, res) => {
-    const number = req.params.number; // Replace with your desired number
-    const message = req.params.message; // Replace with your desired message
+    const { number, message } = req.params;
 
     // Ensure the number and message are provided
     if (!number || !message) {
@@ -87,11 +90,12 @@ app.get('/send-message/:number/:message', (req, res) => {
 
     client.sendMessage(formattedNumber, message)
         .then(response => {
+            console.log(`Message sent to ${number}:`);
             res.status(200).send(`Message sent to ${number}`);
         })
         .catch(err => {
-            console.error(err);
-            res.status(500).send('Failed to send message', err);
+            console.error('Failed to send message:', err);
+            res.status(500).send('Failed to send message');
         });
 });
 
