@@ -46,6 +46,9 @@ app.use(express.json());
 app.get("/", (req, res) => {
     res.send("Express server is running");
 });
+app.get("/ping", (req, res) => {
+    res.send("ping");
+});
 
 // Serve the QR code on the /show-qr route
 app.get('/show-qr', (req, res) => {
