@@ -84,7 +84,7 @@ app.get('/show-qr', (req, res) => {
 app.get('/send-message/:number/:message', (req, res) => {
     // const { number, message } = req.params;
     const number = req.params.number;
-    const message = req.params.message;
+    const message = decodeURIComponent(req.params.message);
 
 
     // Ensure the number and message are provided
