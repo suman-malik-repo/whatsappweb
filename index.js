@@ -6,9 +6,6 @@ const qrcode = require('qrcode');
 // Initialize the app and WhatsApp client
 const app = express();
 
-// Middleware to parse URL-encoded data
-app.use(express.urlencoded({ extended: true }));
-
 // Enable CORS for all origins
 app.use(cors());
 
@@ -82,10 +79,7 @@ app.get('/show-qr', (req, res) => {
 
 // Route to send a message to a specific number
 app.get('/send-message/:number/:message', (req, res) => {
-    // const { number, message } = req.params;
-    const number = req.params.number;
-    const message = decodeURIComponent(req.params.message);
-
+    const { number, message } = req.params;
 
     // Ensure the number and message are provided
     if (!number || !message) {
