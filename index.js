@@ -41,6 +41,7 @@ client.on('disconnected', (reason) => {
     qrCodeData = ''; // Clear QR code data if disconnected
 });
 
+
 // Initialize the WhatsApp client
 client.initialize();
 
