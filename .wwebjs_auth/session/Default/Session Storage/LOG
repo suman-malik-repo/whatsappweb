@@ -1,3 +1,2 @@
-2025/01/03-00:26:27.771 395c Reusing MANIFEST D:\My Projects\My Commerce\Whatsapp Web.js\.wwebjs_auth\session\Default\Session Storage/MANIFEST-000001
-2025/01/03-00:26:27.771 395c Recovering log #3
-2025/01/03-00:26:27.771 395c Reusing old log D:\My Projects\My Commerce\Whatsapp Web.js\.wwebjs_auth\session\Default\Session Storage/000003.log 
+2025/01/05-18:39:51.829 13d8 Creating DB D:\My Projects\My Commerce\Whatsapp Web.js\.wwebjs_auth\session\Default\Session Storage since it was missing.
+2025/01/05-18:39:51.862 13d8 Reusing MANIFEST D:\My Projects\My Commerce\Whatsapp Web.js\.wwebjs_auth\session\Default\Session Storage/MANIFEST-000001
