@@ -1,2 +1,3 @@
-2025/01/17-17:32:40.110 266c Creating DB D:\My Projects\My Commerce\whatsappweb\whatsapp-sessions\session\Default\Session Storage since it was missing.
-2025/01/17-17:32:40.118 266c Reusing MANIFEST D:\My Projects\My Commerce\whatsappweb\whatsapp-sessions\session\Default\Session Storage/MANIFEST-000001
+2025/01/17-17:34:17.969 53a4 Reusing MANIFEST D:\My Projects\My Commerce\whatsappweb\whatsapp-sessions\session\Default\Session Storage/MANIFEST-000001
+2025/01/17-17:34:17.969 53a4 Recovering log #3
+2025/01/17-17:34:17.969 53a4 Reusing old log D:\My Projects\My Commerce\whatsappweb\whatsapp-sessions\session\Default\Session Storage/000003.log 
